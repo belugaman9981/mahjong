@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Mahjong 🀄</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════ MAIN MENU ═══════════════════════════════ -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-bg">
+      <div class="bamboo-left"></div>
+      <div class="bamboo-right"></div>
+      <div class="menu-inner">
+        <div class="menu-dragon-top">龍</div>
+        <h1 class="menu-title">麻雀</h1>
+        <h2 class="menu-subtitle">CHINESE MAHJONG</h2>
+        <div class="menu-tiles-preview">
+          <span class="preview-tile">🀄</span>
+          <span class="preview-tile">🀅</span>
+          <span class="preview-tile">🀆</span>
+          <span class="preview-tile">🀀</span>
+          <span class="preview-tile">🀁</span>
+        </div>
+        <div class="menu-buttons">
+          <button class="menu-btn primary" onclick="App.startBotGame()">
+            <span class="btn-icon">🤖</span>
+            <span class="btn-text">Play vs Bots</span>
+            <span class="btn-sub">Practice your skills</span>
+          </button>
+          <button class="menu-btn" onclick="App.showMultiplayer()">
+            <span class="btn-icon">👥</span>
+            <span class="btn-text">IRL Multiplayer</span>
+            <span class="btn-sub">4 players, same browser</span>
+          </button>
+          <button class="menu-btn" onclick="App.showRules()">
+            <span class="btn-icon">📜</span>
+            <span class="btn-text">Rules</span>
+            <span class="btn-sub">Learn to play</span>
+          </button>
+        </div>
+        <div class="menu-footer">
+          <div class="tile-row-deco">🀇🀈🀉🀊🀋🀌🀍🀎🀏</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ GAME SCREEN ═══════════════════════════════ -->
+  <div id="screen-game" class="screen">
+    <div class="game-board">
+
+      <!-- TOP BAR -->
+      <div class="top-bar">
+        <button class="topbar-btn" onclick="App.showMenu()">⬅ Menu</button>
+        <div class="top-info">
+          <span id="round-wind-label" class="round-badge">🀀 East Round</span>
+          <span id="tiles-remaining-label" class="tiles-badge">🀫 136</span>
+          <span id="dealer-label" class="dealer-badge">Dealer: East</span>
+        </div>
+        <button class="topbar-btn" onclick="App.sortMyHand()">Sort ↕</button>
+      </div>
+
+      <!-- NORTH (opponent 2) -->
+      <div class="zone-top">
+        <div class="opp-info">
+          <span class="opp-wind-badge">🀂 North</span>
+          <span id="score-2" class="opp-score">25000</span>
+        </div>
+        <div id="melds-2" class="melds-row melds-top"></div>
+        <div id="hand-2" class="hand-top"></div>
+        <div id="discards-2" class="discard-grid discard-top"></div>
+      </div>
+
+      <!-- MIDDLE ROW -->
+      <div class="zone-middle">
+
+        <!-- WEST (opponent 1) -->
+        <div class="zone-left">
+          <div class="opp-info-vert">
+            <span class="opp-wind-badge-vert">西<br>West</span>
+            <span id="score-1" class="opp-score-vert">25000</span>
+          </div>
+          <div id="melds-1" class="melds-left"></div>
+          <div id="hand-1" class="hand-left"></div>
+          <div id="discards-1" class="discard-grid discard-side"></div>
+        </div>
+
+        <!-- CENTER -->
+        <div class="zone-center">
+          <div class="center-table">
+            <div class="center-deco">
+              <div class="wind-compass">
+                <span class="wind-n">北</span>
+                <span class="wind-w">西</span>
+                <span class="wind-center" id="wind-center-char">東</span>
+                <span class="wind-e">東</span>
+                <span class="wind-s">南</span>
+              </div>
+            </div>
+            <div id="last-discard-zone" class="last-discard-zone">
+              <div class="last-discard-label">Last Discard</div>
+              <div id="last-discard-tile" class="last-discard-tile"></div>
+              <div id="last-discard-by" class="last-discard-by"></div>
+            </div>
+          </div>
+          <div id="game-message" class="game-message"></div>
+        </div>
+
+        <!-- EAST (opponent 3) -->
+        <div class="zone-right">
+          <div id="discards-3" class="discard-grid discard-side"></div>
+          <div id="hand-3" class="hand-right"></div>
+          <div id="melds-3" class="melds-right"></div>
+          <div class="opp-info-vert opp-info-right">
+            <span class="opp-wind-badge-vert">東<br>East</span>
+            <span id="score-3" class="opp-score-vert">25000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOUTH (player) -->
+      <div class="zone-bottom">
+        <div class="my-info-row">
+          <span class="my-wind-badge">🀁 South — You</span>
+          <span id="score-0" class="my-score">25000</span>
+        </div>
+        <div id="discards-0" class="discard-grid discard-bottom"></div>
+        <div id="melds-0" class="melds-row melds-bottom"></div>
+        <div id="hand-0" class="hand-bottom"></div>
+        <div class="action-bar">
+          <button id="btn-draw" class="action-btn draw-btn" onclick="App.playerDraw()">Draw</button>
+          <button id="btn-win" class="action-btn win-btn" onclick="App.playerWin()" disabled>胡 Win!</button>
+          <button id="btn-pon" class="action-btn" onclick="App.playerPon()" disabled>碰 Pon</button>
+          <button id="btn-chi" class="action-btn" onclick="App.playerChi()" disabled>吃 Chi</button>
+          <button id="btn-kan" class="action-btn" onclick="App.playerKan()" disabled>槓 Kan</button>
+          <button id="btn-pass" class="action-btn pass-btn" onclick="App.playerPass()" disabled>Pass</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- OVERLAY (for chi selection, win screen, etc.) -->
+    <div id="game-overlay" class="game-overlay hidden">
+      <div id="overlay-box" class="overlay-box">
+        <div id="overlay-content"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════ MULTIPLAYER ═══════════════════════════════ -->
+  <div id="screen-multiplayer" class="screen">
+    <div class="mp-bg">
+      <div class="mp-inner">
+        <button class="back-btn" onclick="App.showMenu()">⬅ Back</button>
+        <h2 class="mp-title">IRL Multiplayer</h2>
+        <p class="mp-desc">All 4 players open this extension in separate windows on the same computer. Use a room code to connect.</p>
+
+        <div class="mp-tabs">
+          <button class="mp-tab active" onclick="App.mpShowHost(this)">🏠 Host Game</button>
+          <button class="mp-tab" onclick="App.mpShowJoin(this)">🔗 Join Game</button>
+        </div>
+
+        <div id="mp-host-panel" class="mp-panel">
+          <p class="mp-hint">Share the room code below with 3 friends</p>
+          <div class="mp-room-display">
+            <span id="mp-room-code" class="mp-room-code">----</span>
+            <button onclick="App.mpCopyCode()" class="copy-btn">Copy</button>
+          </div>
+          <button class="mp-action-btn" onclick="App.mpCreateRoom()">Create Room</button>
+          <div id="mp-players-list" class="mp-players-list"></div>
+          <button id="mp-start-btn" class="mp-action-btn start-mp-btn" style="display:none" onclick="App.mpStartGame()">Start Game (4 players ready)</button>
+        </div>
+
+        <div id="mp-join-panel" class="mp-panel" style="display:none">
+          <p class="mp-hint">Enter the room code from the host</p>
+          <input id="mp-join-input" class="mp-join-input" placeholder="Enter code..." maxlength="4">
+          <button class="mp-action-btn" onclick="App.mpJoinRoom()">Join Room</button>
+          <div id="mp-join-status" class="mp-join-status"></div>
+        </div>
+
+        <div class="mp-note">
+          <strong>⚡ How it works:</strong> Open Chrome, click the Mahjong extension icon in 4 separate windows. One player hosts, three join with the room code. All gameplay is synced in real time!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ RULES ═══════════════════════════════ -->
+  <div id="screen-rules" class="screen">
+    <div class="rules-bg">
+      <div class="rules-inner">
+        <button class="back-btn" onclick="App.showMenu()">⬅ Back</button>
+        <h2 class="rules-title">🀄 Chinese Mahjong Rules</h2>
+        <div class="rules-scroll">
+
+          <div class="rules-section">
+            <h3>🎯 Objective</h3>
+            <p>Be the first to complete a winning hand of <strong>14 tiles</strong> consisting of 4 sets (melds) and 1 pair.</p>
+          </div>
+
+          <div class="rules-section">
+            <h3>🀄 The Tiles (136 total)</h3>
+            <div class="rules-tiles-demo">
+              <div class="rtd-group">
+                <div class="rtd-label">Man 萬 (Characters) ×36</div>
+                <div class="rtd-tiles">🀇🀈🀉🀊🀋🀌🀍🀎🀏</div>
+              </div>
+              <div class="rtd-group">
+                <div class="rtd-label">Pin 筒 (Circles) ×36</div>
+                <div class="rtd-tiles">🀙🀚🀛🀜🀝🀞🀟🀠🀡</div>
+              </div>
+              <div class="rtd-group">
+                <div class="rtd-label">Sou 索 (Bamboo) ×36</div>
+                <div class="rtd-tiles">🀐🀑🀒🀓🀔🀕🀖🀗🀘</div>
+              </div>
+              <div class="rtd-group">
+                <div class="rtd-label">Winds 風 ×16</div>
+                <div class="rtd-tiles">🀀🀁🀂🀃</div>
+                <div class="rtd-sub">East · South · West · North</div>
+              </div>
+              <div class="rtd-group">
+                <div class="rtd-label">Dragons 中發白 ×12</div>
+                <div class="rtd-tiles">🀄🀅🀆</div>
+                <div class="rtd-sub">Chun (Red) · Hatsu (Green) · Haku (White)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rules-section">
+            <h3>🃏 Types of Melds</h3>
+            <div class="rules-meld-types">
+              <div class="rmt-item">
+                <span class="rmt-name">Sequence (Chow/吃)</span>
+                <span class="rmt-tiles">🀇🀈🀉</span>
+                <span class="rmt-desc">3 consecutive tiles of the same suit. Only numbered suits. Only from the player to your left.</span>
+              </div>
+              <div class="rmt-item">
+                <span class="rmt-name">Triplet (Pong/碰)</span>
+                <span class="rmt-tiles">🀙🀙🀙</span>
+                <span class="rmt-desc">3 identical tiles. Can claim from any player's discard.</span>
+              </div>
+              <div class="rmt-item">
+                <span class="rmt-name">Kong (Kan/槓)</span>
+                <span class="rmt-tiles">🀄🀄🀄🀄</span>
+                <span class="rmt-desc">4 identical tiles. Draw an extra tile from the wall after declaring.</span>
+              </div>
+              <div class="rmt-item">
+                <span class="rmt-name">Pair (雀頭)</span>
+                <span class="rmt-tiles">🀀🀀</span>
+                <span class="rmt-desc">2 identical tiles. Every winning hand needs exactly one pair.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rules-section">
+            <h3>🔄 Turn Flow</h3>
+            <ol class="rules-list">
+              <li>Draw a tile from the wall</li>
+              <li>If you can win (胡 Hu), declare it!</li>
+              <li>Discard one tile from your hand</li>
+              <li>Other players may <strong>claim</strong> your discard (Pon/Chi/Kan/Win)</li>
+              <li>If claimed, the claiming player discards; if not, next player draws</li>
+            </ol>
+          </div>
+
+          <div class="rules-section">
+            <h3>🏆 Winning Hands</h3>
+            <div class="rules-meld-types">
+              <div class="rmt-item">
+                <span class="rmt-name">Standard Hand</span>
+                <span class="rmt-desc">4 melds (sets) + 1 pair = 14 tiles</span>
+              </div>
+              <div class="rmt-item">
+                <span class="rmt-name">Seven Pairs (七對子)</span>
+                <span class="rmt-desc">7 pairs of identical tiles — a special winning hand</span>
+              </div>
+              <div class="rmt-item">
+                <span class="rmt-name">Thirteen Orphans (十三么)</span>
+                <span class="rmt-desc">One each of 1m,9m,1p,9p,1s,9s,E,S,W,N,中,發,白 + any duplicate = 14 tiles</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rules-section">
+            <h3>⭐ Scoring (Fan)</h3>
+            <div class="rules-score-list">
+              <div class="rsl-item"><span>Self-draw win (Tsumo)</span><span>+1 Fan</span></div>
+              <div class="rsl-item"><span>Concealed hand</span><span>+1 Fan</span></div>
+              <div class="rsl-item"><span>Dragon triplet</span><span>+1 Fan each</span></div>
+              <div class="rsl-item"><span>Round/Seat wind triplet</span><span>+1 Fan each</span></div>
+              <div class="rsl-item"><span>All one suit</span><span>+3 Fan</span></div>
+              <div class="rsl-item"><span>Seven pairs</span><span>+3 Fan</span></div>
+              <div class="rsl-item"><span>All triplets</span><span>+2 Fan</span></div>
+            </div>
+          </div>
+
+          <div class="rules-section">
+            <h3>🎮 Controls (Bot Game)</h3>
+            <ul class="rules-list">
+              <li><strong>Draw:</strong> Draw a tile from the wall</li>
+              <li><strong>Click tile:</strong> When 14 tiles in hand, click to discard</li>
+              <li><strong>碰 Pon:</strong> Claim discard for a triplet</li>
+              <li><strong>吃 Chi:</strong> Claim left player's discard for a sequence</li>
+              <li><strong>槓 Kan:</strong> Declare a kong (4 of a kind)</li>
+              <li><strong>胡 Win!:</strong> Declare a winning hand</li>
+              <li><strong>Pass:</strong> Skip claiming a discard</li>
+              <li><strong>Sort ↕:</strong> Sort tiles in hand by suit</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/tiles.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/bot.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
