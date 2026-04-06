@@ -148,3 +148,4 @@ function botDecideClaim(hand, melds, discardedTile, fromDirection, myWind, round
 function botCanSelfWin(hand, melds) {
   return canWin(hand, melds);
 }
+
