@@ -91,3 +91,4 @@ function tileCounts(tiles) {
   for (const t of tiles) { const k = tileKey(t); c[k] = (c[k] || 0) + 1; }
   return c;
 }
+
