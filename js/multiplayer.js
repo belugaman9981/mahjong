@@ -242,3 +242,4 @@ const Multiplayer = {
     this.playersReady = [];
   }
 };
+
