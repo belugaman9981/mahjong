@@ -1,3 +1,4 @@
+
 // ═══════════════════════════════════════════════════════════
 // MULTIPLAYER.JS — BroadcastChannel IRL multiplayer
 // Works across multiple windows of the same Chrome extension
