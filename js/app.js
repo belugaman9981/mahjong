@@ -563,4 +563,3 @@ document.addEventListener('DOMContentLoaded', () => {
   App.showScreen('screen-menu');
 });
 
-
